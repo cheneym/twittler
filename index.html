@@ -10,7 +10,7 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
-        
+
         var $button = $('<button></button>');
         $button.text('Update Tweets');
         $button.appendTo($body);
@@ -32,7 +32,7 @@
             var tweet = streams.home[index];
             var $tweet = $('<div></div>')
             $tweet.text('@' + tweet.user + ': ' + tweet.message);
-            $(this).after($tweet);
+            $(this).closest('body').find('div').first().before($tweet);
             index++;
           }
 
