@@ -15,30 +15,31 @@
         $button.text('Update Tweets');
         $button.appendTo($body);
 
-        var index = streams.home.length - 1;
-        var prevIndex = streams.home.length;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+        var makeTweetUpdater = function() {
+          var index = 0;
+
+          return function() {
+            while (index < streams.home.length) {
+              var tweet = streams.home[index];
+              var $tweet = $('<div></div>');
+              $tweet.text('@' + tweet.user + ': ' + tweet.message);
+              var $allTweets = $('body').find('div');
+              
+              if ($allTweets.length === 0) {
+                $tweet.appendTo($body);
+              } else {
+                $allTweets.first().before($tweet);
+              }
+
+              index++;
+            }
+          }
         }
 
-        $button.on('click', function() {
-          var index = prevIndex;
+        var updateTweets = makeTweetUpdater();
 
-          while (index < streams.home.length) {
-            var tweet = streams.home[index];
-            var $tweet = $('<div></div>')
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
-            $(this).closest('body').find('div').first().before($tweet);
-            index++;
-          }
-
-          prevIndex = index;
-        });
-
+        updateTweets();
+        $button.on('click', updateTweets);
       });
 
     </script>
