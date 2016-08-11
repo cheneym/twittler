@@ -14,16 +14,26 @@
         var $button = $('<button></button>');
         $button.text('Update Tweets');
         $button.appendTo($body);
-
+        
         var makeTweetUpdater = function() {
           var index = 0;
 
           return function() {
             while (index < streams.home.length) {
               var tweet = streams.home[index];
-              var $tweet = $('<div></div>');
-              $tweet.text('@' + tweet.user + ': ' + tweet.message);
-              var $allTweets = $('body').find('div');
+              var $tweet = $('<section></section>');
+              
+              var tweetMsg = '@' + tweet.user + ': ' + tweet.message;
+              var $tweetMsg = $('<p></p>');
+              $tweetMsg.text(tweetMsg);
+              
+              var tweetDate = tweet.created_at;
+              var $tweetDate = $('<p></p>');
+              $tweetDate.text(tweetDate);
+
+              $tweet.append($tweetMsg);
+              $tweet.append($tweetDate);
+              var $allTweets = $('body').find('section');
               
               if ($allTweets.length === 0) {
                 $tweet.appendTo($body);
