@@ -10,8 +10,13 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
+        
+        var $button = $('<button></button>');
+        $button.text('Update Tweets');
+        $button.appendTo($body);
 
         var index = streams.home.length - 1;
+        var prevIndex = streams.home.length;
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
@@ -19,6 +24,20 @@
           $tweet.appendTo($body);
           index -= 1;
         }
+
+        $button.on('click', function() {
+          var index = prevIndex;
+
+          while (index < streams.home.length) {
+            var tweet = streams.home[index];
+            var $tweet = $('<div></div>')
+            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $(this).after($tweet);
+            index++;
+          }
+
+          prevIndex = index;
+        });
 
       });
 
