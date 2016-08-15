@@ -4,7 +4,7 @@
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
     <style>
-    
+
       /* http://meyerweb.com/eric/tools/css/reset/ 
        v2.0 | 20110126
        License: none (public domain)
@@ -61,12 +61,13 @@
       */
 
       a {
-        color: #0000EE;
+        font-weight: bold;
         text-decoration: none;
       }
-
       a:hover {
-        color: #a9b2b9;
+        color: #0000EE;
+        text-decoration: underline;
+        cursor: pointer;
       }
 
       /*
@@ -79,6 +80,20 @@
         margin: 15px 0px;
       }
       
+      /*
+        ========================================
+        Custom styles
+        ========================================
+      */
+      
+      p {
+        font-size: 20px;
+      }
+      .date {
+        font-size: 14px;
+        color: #696969;
+      }
+
     </style>
   </head>
 
@@ -110,7 +125,9 @@
               $tweetMsg.text(tweetMsg);
               
               var tweetDate = tweet.created_at;
-              var $tweetDate = $('<p></p>');
+              var $tweetDate = $('<p></p>', {
+                class: 'date'
+              });
               $tweetDate.text(tweetDate);
 
               $tweet.append($tweetUser);
