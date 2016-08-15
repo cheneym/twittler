@@ -76,10 +76,36 @@
         ========================================
       */
 
-      section {
+      .tweet {
         margin: 15px 0px;
       }
-      
+
+      /*
+        ========================================
+        Columns
+        ========================================
+      */
+
+      .col-3-10 {
+        width: 29%;
+      }
+
+      .col-4-10 {
+        width: 39%;
+      }
+
+      .col-3-10,
+      .col-4-10 {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .col-3-10,
+      .col-4-10 {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
       /*
         ========================================
         Custom styles
@@ -104,9 +130,24 @@
         var $body = $('body');
         $body.html('');
 
+        var $leftCol = $('<section></section>', {
+          class: 'col-3-10'
+        });
+        $leftCol.appendTo($body);
+
+        var $midCol = $('<section></section>', {
+          class: 'col-4-10'
+        });
+        $midCol.appendTo($body);
+
+        var $rightCol = $('<section></section>', {
+          class: 'col-3-10'
+        });
+        $rightCol.appendTo($body);
+
         var $button = $('<button></button>');
         $button.text('Update Tweets');
-        $button.appendTo($body);
+        $button.appendTo($rightCol);
 
         var makeTweetUpdater = function() {
           var index = 0;
@@ -114,7 +155,9 @@
           return function() {
             while (index < streams.home.length) {
               var tweet = streams.home[index];
-              var $tweet = $('<section></section>');
+              var $tweet = $('<section></section>', {
+                class: 'tweet'
+              });
                 
               var tweetUser = '@' + tweet.user;
               var $tweetUser = $('<a></a>');
@@ -133,12 +176,12 @@
               $tweet.append($tweetUser);
               $tweet.append($tweetMsg);
               $tweet.append($tweetDate);
-              var $allTweets = $('body').find('section');
+              var $allTweets = $midCol.find('section');
               
               if ($allTweets.length === 0) {
-                $tweet.appendTo($body);
+                $tweet.appendTo($midCol);
               } else {
-                $allTweets.first().before($tweet);
+                $tweet.prependTo($midCol);
               }
 
               index++;
