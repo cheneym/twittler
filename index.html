@@ -218,7 +218,7 @@
         var userTweets;
         var prevName = null;
         var updateUsrTweets;
-        $('a').on('click', function() {
+        $body.on('click', 'a', function() {
           if (!(this.textContent === prevName)) {
             $rightCol.empty();
             userTweets = streams.users[this.textContent.slice(1)];
