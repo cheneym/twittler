@@ -3,6 +3,7 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <style>
 
       /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -72,38 +73,34 @@
 
       /*
         ========================================
-        Content
-        ========================================
-      */
-
-      .tweet {
-        margin: 15px 0px;
-      }
-
-      /*
-        ========================================
         Columns
         ========================================
       */
-
-      .col-3-10 {
-        width: 30%;
+      
+      .left {
+        width: 25%;
+      }
+      
+      .middle {
+        width: 55%;
       }
 
-      .col-4-10 {
-        width: 40%;
+      .right {
+        width: 35%;
       }
 
-      .col-3-10,
-      .col-4-10 {
+      .left,
+      .middle,
+      .right {
         display: inline-block;
         vertical-align: top;
       }
 
-      .col-3-10,
-      .col-4-10 {
-        padding-left: 0px;
-        padding-right: 0px;
+      .left,
+      .middle,
+      .right {
+        padding-left: 15px;
+        padding-right: 15px;
       }
       
       /*
@@ -113,7 +110,7 @@
       */
 
       button {
-        background-color: #3232ff;
+        background-color: #FF3B3F;
         border: none;
         color: white;
         padding: 24px 60px;
@@ -126,24 +123,57 @@
 
       /*
         ========================================
+        Content
+        ========================================
+      */
+      
+      body {
+        background-color: #EFEFEF;
+      }
+      
+      .tweet-container {
+        width: 72%;
+        display: inline-block;
+        background-color: #CAEBF2;
+      }
+
+      .tweet {
+        background-color: #FFF;
+        padding: 5px;
+        border: 0.5px solid #d3d3d3;
+        border-radius: 3px;
+        font-family: Arial;
+      }
+
+      .date {
+        font-size: 14px;
+        margin-top: 14px;
+        color: #696969;
+      }
+
+      /*
+        ========================================
         Custom styles
         ========================================
       */
+
       h1, h2{
-        margin: 20px 0px;
+        margin-top: 20px;
+        margin-bottom: 10px;
       }
       h1 {
+        font-family: 'Pacifico', Helvetica, sans-serif;
+        font-size: 76px;
         text-align: center;
       }
       h2 {
+        font-family: Arial;
+        font-size: 26px;
+        text-decoration: underline;
         text-align: left;
       }
       p {
         font-size: 20px;
-      }
-      .date {
-        font-size: 14px;
-        color: #696969;
       }
       
     </style>
@@ -158,7 +188,7 @@
 
         //Left Column
         var $leftCol = $('<section></section>', {
-          class: 'col-3-10'
+          class: 'col-3-10 left'
         });
         $leftCol.appendTo($body);
 
@@ -172,12 +202,17 @@
         $button.text('Update Tweets');
         $button.appendTo($leftCol);
 
+        //Container for middle and right columns
+        var $tweetContainer = $('<section></section>', {
+          class: 'tweet-container'
+        });
+        $tweetContainer.appendTo($body);
 
         //Middle Column
         var $midCol = $('<section></section>', {
-          class: 'col-4-10'
+          class: 'col-4-10 middle'
         });
-        $midCol.appendTo($body);
+        $midCol.appendTo($tweetContainer);
         
         var $centerTitle = $('<h2></h2>');
         $centerTitle.text('My Tweets');
@@ -185,9 +220,9 @@
 
         //Right Column
         var $rightCol = $('<section></section>', {
-          class: 'col-3-10'
+          class: 'col-3-10 right'
         });
-        $rightCol.appendTo($body);
+        $rightCol.appendTo($tweetContainer);
 
         //Tweet Updating
         var makeTweetUpdater = function(tweetList, $appendColumn) {
