@@ -129,7 +129,15 @@
         Custom styles
         ========================================
       */
-      
+      h1, h2{
+        margin: 20px 0px;
+      }
+      h1 {
+        text-align: center;
+      }
+      h2 {
+        text-align: left;
+      }
       p {
         font-size: 20px;
       }
@@ -137,7 +145,7 @@
         font-size: 14px;
         color: #696969;
       }
-  
+      
     </style>
   </head>
 
@@ -148,25 +156,40 @@
         var $body = $('body');
         $body.html('');
 
+        //Left Column
         var $leftCol = $('<section></section>', {
           class: 'col-3-10'
         });
         $leftCol.appendTo($body);
 
+        //Twittler Title
+        var $mainTitle = $('<h1></h1>');
+        $mainTitle.text('Twittler');
+        $mainTitle.appendTo($leftCol);
+
+        //Button
+        var $button = $('<button></button>');
+        $button.text('Update Tweets');
+        $button.appendTo($leftCol);
+
+
+        //Middle Column
         var $midCol = $('<section></section>', {
           class: 'col-4-10'
         });
         $midCol.appendTo($body);
+        
+        var $centerTitle = $('<h2></h2>');
+        $centerTitle.text('My Tweets');
+        $centerTitle.appendTo($midCol);
 
+        //Right Column
         var $rightCol = $('<section></section>', {
           class: 'col-3-10'
         });
         $rightCol.appendTo($body);
 
-        var $button = $('<button></button>');
-        $button.text('Update Tweets');
-        $button.appendTo($leftCol);
-
+        //Tweet Updating
         var makeTweetUpdater = function(tweetList, $appendColumn) {
           var index = 0;
 
@@ -194,12 +217,12 @@
               $tweet.append($tweetUser);
               $tweet.append($tweetMsg);
               $tweet.append($tweetDate);
-              var $allTweets = $appendColumn.find('section');
+              var $allTweets = $appendColumn.find('.tweet');
               
               if ($allTweets.length === 0) {
                 $tweet.appendTo($appendColumn);
               } else {
-                $tweet.prependTo($appendColumn);
+                $allTweets.first().before($tweet);
               }
 
               index++;
@@ -211,24 +234,38 @@
 
         updateMyTweets();
 
+        //Clicking on Link
+        var userTweets;
+        var currName;
+        var prevName = null;
+        var updateUserTweets;
+        $body.on('click', 'a', function() {
+          currName = this.textContent.slice(1);
+          if (!(currName === prevName)) {
+            //Clear right column
+            $rightCol.empty();
+            userTweets = streams.users[currName];
+            updateUserTweets = makeTweetUpdater(userTweets, $rightCol);
+
+            //Add title/heading back to right side
+            var $rightTitle = $('<h2></h2>');
+            if (currName[currName.length-1] === 's') {
+              $rightTitle.text(currName + '\' Tweets');
+            } else {
+              $rightTitle.text(currName + '\'s Tweets');
+            }
+            $rightTitle.appendTo($rightCol);
+          }
+          updateUserTweets();
+          prevName = currName;
+        });
+
         //Clicking on Button
         $button.on('click', function() {
           updateMyTweets();
-          updateUsrTweets();
-        });
-
-        //Clicking on Link
-        var userTweets;
-        var prevName = null;
-        var updateUsrTweets;
-        $body.on('click', 'a', function() {
-          if (!(this.textContent === prevName)) {
-            $rightCol.empty();
-            userTweets = streams.users[this.textContent.slice(1)];
-            updateUsrTweets = makeTweetUpdater(userTweets, $rightCol);
+          if (updateUserTweets !== undefined) {
+            updateUserTweets();
           }
-          updateUsrTweets();
-          prevTarget = this.textContent;
         });
 
       });
