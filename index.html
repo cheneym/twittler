@@ -66,6 +66,7 @@
       */
 
       a {
+        font-size: 16px;
         font-weight: bold;
         text-decoration: none;
       }
@@ -134,25 +135,25 @@
       body {
         background-color: #EFEFEF;
       }
-      
       .tweet-container {
         width: 72%;
         display: inline-block;
         background-color: #CAEBF2;
       }
-
       .tweet {
         background-color: #FFF;
-        padding: 5px;
+        padding: 0px 5px 5px 5px;
         border: 0.5px solid #d3d3d3;
         border-radius: 3px;
         font-family: Arial;
       }
-
-      .date {
+      .date,
+      .date-ref {
         font-size: 14px;
-        margin-top: 14px;
         color: #696969;
+      }
+      .date {
+        margin-top: 14px;
       }
 
       /*
@@ -243,6 +244,16 @@
               var $tweetUser = $('<a></a>');
               $tweetUser.text(tweetUser);
 
+              var tweetRefTime = ' - ' + moment(tweetDate).fromNow();
+              var $tweetRefTime = $('<span></span>', {
+                class: 'date-ref'
+              });
+              $tweetRefTime.text(tweetRefTime);
+
+              var $tweetUserWrap = $('<p></p>');
+              $tweetUserWrap.append($tweetUser);
+              $tweetUserWrap.append($tweetRefTime);
+
               var tweetMsg = tweet.message;
               var $tweetMsg = $('<p></p>');
               $tweetMsg.text(tweetMsg);
@@ -253,7 +264,7 @@
               });
               $tweetDate.text(tweetDate);
 
-              $tweet.append($tweetUser);
+              $tweet.append($tweetUserWrap);
               $tweet.append($tweetMsg);
               $tweet.append($tweetDate);
               var $allTweets = $appendColumn.find('.tweet');
@@ -307,6 +318,29 @@
           }
         });
 
+        //Update human friendly date
+        var updateDateRef = function() {
+          var dateRefs = $midCol.find('.date-ref');
+          var dates = $midCol.find('.date');
+          var date;
+          var $date;
+          var $dateRef;
+          var modifyDateRef = function(dateRefs, dates) {
+            for (var i = 0; i < dateRefs.length; i++) {
+              $date = $(dates[i]);
+              $dateRef = $(dateRefs[i]);
+              date = new Date($date.text());
+              $dateRef.text(' - ' + moment(date).fromNow());
+            }
+          }
+          modifyDateRef(dateRefs, dates);
+
+          dateRefs = $rightCol.find('.date-ref');
+          dates = $rightCol.find('.date');
+          modifyDateRef(dateRefs, dates);
+        } 
+
+        setInterval(updateDateRef, 5000);
       });
 
     </script>
