@@ -212,7 +212,10 @@
         updateMyTweets();
 
         //Clicking on Button
-        $button.on('click', updateMyTweets);
+        $button.on('click', function() {
+          updateMyTweets();
+          updateUsrTweets();
+        });
 
         //Clicking on Link
         var userTweets;
