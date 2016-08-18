@@ -107,23 +107,43 @@
         padding-left: 15px;
         padding-right: 15px;
       }
-      
+
       /*
         ========================================
         Buttons
         ========================================
       */
+      
+      .textbox {
+        margin-top: 10px;
+        width: 98.5%;
+        height: 70px;
+      }
 
+      /*
+        ========================================
+        Buttons
+        ========================================
+      */
+      
       button {
+        border-radius: 6px;
         background-color: #FF3B3F;
         border: none;
         color: white;
-        padding: 24px 60px;
-        margin: 20px 41.3px;
         text-align: center;
         text-decoration: none;
         display: inline;
+      }
+      .update-tweet {
+        padding: 24px 60px;
+        margin: 20px 41.3px;
         font-size: 28px;
+      }
+      .button-tweet {
+        padding: 10px 20px;
+        margin: 10px 0px 10px 335px;
+        font-size: 14px;
       }
 
       /*
@@ -163,7 +183,7 @@
       */
 
       h1, h2{
-        margin-top: 20px;
+        margin-top: 10px;
         margin-bottom: 10px;
       }
       h1 {
@@ -177,6 +197,9 @@
         text-decoration: underline;
         text-align: left;
       }
+      .right h2 {
+        margin-top: 154px;
+      }
       p {
         font-size: 20px;
       }
@@ -188,6 +211,9 @@
     <script>
 
       $(document).ready(function(){
+        var username = 'me';
+        streams.users[username] = [];
+
         var $body = $('body');
         $body.html('');
 
@@ -203,7 +229,9 @@
         $mainTitle.appendTo($leftCol);
 
         //Button
-        var $button = $('<button></button>');
+        var $button = $('<button></button>', {
+          class: 'update-tweet'
+        });
         $button.text('Update Tweets');
         $button.appendTo($leftCol);
 
@@ -219,6 +247,19 @@
         });
         $midCol.appendTo($tweetContainer);
         
+        var $textbox =  $('<textarea></textarea>', {
+          class: 'textbox',
+          placeholder: 'What\'s Happening?'
+        });
+        $textbox.appendTo($midCol);
+
+        var $tweeter = $('<button></button>', {
+          class: 'button-tweet'
+        });
+        $tweeter.text('Tweet');
+        $tweeter.appendTo($midCol);
+
+        //Middle Title
         var $centerTitle = $('<h2></h2>');
         $centerTitle.text('My Tweets');
         $centerTitle.appendTo($midCol);
@@ -324,12 +365,26 @@
           prevName = currName;
         });
 
-        //Clicking on Button
+        //Clicking on Update Tweet Button
         $button.on('click', function() {
           updateMyTweets();
           if (currName !== undefined) {
             rebuildRightCol(currName);
           }
+        });
+
+        //Clicking on Tweet Button
+        $tweeter.on('click', function() {
+          var tweet = {};
+          tweet.user = username;
+          tweet.message = $textbox.val();
+          tweet.created_at = new Date();
+          addTweet(tweet);
+          updateMyTweets();
+          if (currName !== undefined) {
+            rebuildRightCol(currName);
+          }
+          $textbox.val(String.Empty);
         });
 
         //Update human friendly date
