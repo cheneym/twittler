@@ -229,6 +229,7 @@
         });
         $rightCol.appendTo($tweetContainer);
 
+        var specialTag = 'AT';
         //Tweet Updating
         var makeTweetUpdater = function(tweetList, $appendColumn) {
           var index = 0;
@@ -237,7 +238,7 @@
             while (index < tweetList.length) {
               var tweet = tweetList[index];
               var $tweet = $('<section></section>', {
-                class: 'tweet'
+                class: 'tweet ' + specialTag + tweet.user
               });
                 
               var tweetUser = '@' + tweet.user;
@@ -281,6 +282,31 @@
         }
 
         var updateMyTweets = makeTweetUpdater(streams.home, $midCol);
+        
+        //Copy specific tweets from middle column to right column
+        var copyTweets = function(className) {
+          var filteredTweets = $midCol.find('.' + className);
+          for (var i = 0; i < filteredTweets.length; i++) {
+            $(filteredTweets[i]).clone().appendTo($rightCol);
+          }
+        };
+
+        //Destroy and rebuild right column with correct tweets
+        var rebuildRightCol = function(className) {
+          //Clear right column
+          $rightCol.empty();
+
+          //Add title/heading back to right side
+          var $rightTitle = $('<h2></h2>');
+          if (className[className.length-1] === 's') {
+            $rightTitle.text(className + '\' Tweets');
+          } else {
+            $rightTitle.text(className + '\'s Tweets');
+          }
+          $rightTitle.appendTo($rightCol);
+
+          copyTweets(specialTag + className);
+        }
 
         updateMyTweets();
 
@@ -288,33 +314,21 @@
         var userTweets;
         var currName;
         var prevName = null;
-        var updateUserTweets;
         $body.on('click', 'a', function() {
           currName = this.textContent.slice(1);
           if (!(currName === prevName)) {
-            //Clear right column
-            $rightCol.empty();
             userTweets = streams.users[currName];
-            updateUserTweets = makeTweetUpdater(userTweets, $rightCol);
-
-            //Add title/heading back to right side
-            var $rightTitle = $('<h2></h2>');
-            if (currName[currName.length-1] === 's') {
-              $rightTitle.text(currName + '\' Tweets');
-            } else {
-              $rightTitle.text(currName + '\'s Tweets');
-            }
-            $rightTitle.appendTo($rightCol);
+            rebuildRightCol(currName);
           }
-          updateUserTweets();
+
           prevName = currName;
         });
 
         //Clicking on Button
         $button.on('click', function() {
           updateMyTweets();
-          if (updateUserTweets !== undefined) {
-            updateUserTweets();
+          if (currName !== undefined) {
+            rebuildRightCol(currName);
           }
         });
 
