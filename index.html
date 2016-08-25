@@ -374,16 +374,18 @@
 
         //Clicking on Tweet Button
         $tweeter.on('click', function() {
-          var tweet = {};
-          tweet.user = username;
-          tweet.message = $textbox.val();
-          tweet.created_at = new Date();
-          addTweet(tweet);
-          updateMyTweets();
-          if (currName !== undefined) {
-            rebuildRightCol(currName);
+          if ($textbox.val() !== '') {
+            var tweet = {};
+            tweet.user = username;
+            tweet.message = $textbox.val();
+            tweet.created_at = new Date();
+            addTweet(tweet);
+            updateMyTweets();
+            if (currName !== undefined) {
+              rebuildRightCol(currName);
+            }
+            $textbox.val(String.Empty);
           }
-          $textbox.val(String.Empty);
         });
 
         //Update human friendly date
